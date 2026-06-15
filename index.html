@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hartree–Fock Atomic Energy Levels</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Spline+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- ===================== TOP BAR ===================== -->
+  <nav class="topbar" id="main-topbar">
+    <div class="logo">
+      <svg class="logo-atom" viewBox="0 0 60 60" aria-hidden="true">
+        <g class="logo-rings" fill="none" stroke="var(--orange)" stroke-opacity="0.5">
+          <ellipse cx="30" cy="30" rx="24" ry="9" />
+          <ellipse cx="30" cy="30" rx="24" ry="9" transform="rotate(60 30 30)" />
+          <ellipse cx="30" cy="30" rx="24" ry="9" transform="rotate(120 30 30)" />
+        </g>
+        <circle cx="30" cy="30" r="5" fill="var(--orange)" />
+      </svg>
+      <span>Hartree–Fock</span>
+    </div>
+
+    <ul>
+      <li><a href="#" class="nav-link active" data-target="table-section" onclick="showSection('table-section', this); return false;">Periodic Table</a></li>
+      <li><a href="#" class="nav-link" data-target="report-section" onclick="showSection('report-section', this); return false;">Report</a></li>
+      <li><a href="#" class="nav-link" data-target="graphs-section" onclick="showSection('graphs-section', this); return false;">Graphs</a></li>
+      <li><a href="#" class="nav-link" data-target="results-section" onclick="showSection('results-section', this); return false;">Results</a></li>
+    </ul>
+
+    <span class="topbar-foot">Ben Greensmith · University of Bergen</span>
+  </nav>
+
+  <!-- ===================== CONTENT ===================== -->
+  <main class="content">
+
+    <!-- ---------- HOME + PERIODIC TABLE (landing) ---------- -->
+    <section id="table-section">
+      <p class="eyebrow">PHYS299 · Bachelor Project</p>
+      <h1>Modelling Atomic Energy Levels with the Hartree–Fock Method</h1>
+      <p class="lead">
+        Click a highlighted element to see its method, code and computed energy.
+      </p>
+      <p>
+        An approximate method to the energy levels of multi-electron atoms,
+        solved on a radial finite-difference grid with the self-consistent field
+        loop. This project covers Lithium, Beryllium, Boron and Carbon — moving
+        from the spherical s-orbitals to the 2p orbital and its dipole
+        correction. The full write-up is under <strong>Report</strong>.
+      </p>
+
+      <div class="periodic-table" id="periodic-table"><!-- built by script.js --></div>
+
+      <div class="legend">
+        <span class="legend-dot live"></span> Computed in this project
+        <span class="legend-dot" style="margin-left:18px;"></span> Not yet modelled
+      </div>
+    </section>
+
+    <!-- ---------- ATOM DETAIL (shown on click) ---------- -->
+    <section id="element-detail-section" hidden>
+      <button class="back-btn" onclick="showSection('table-section', document.querySelector('[data-target=table-section]'))">← Back to table</button>
+
+      <h1 id="el-name">Element</h1>
+      <span class="config" id="el-config"></span>
+
+      <div class="detail-grid">
+        <div class="atom-diagram" id="el-diagram"></div>
+        <div class="el-notes">
+          <p id="el-blurb"></p>
+          <p class="energy-line">
+            Total Hartree–Fock energy:
+            <strong id="el-energy"></strong>
+          </p>
+        </div>
+      </div>
+
+      <p class="code-desc" id="el-desc"></p>
+      <div class="code-head">
+        <h2>Code</h2>
+        <button class="copy-btn" id="copy-btn" onclick="copyCode()">Copy</button>
+      </div>
+      <pre><code class="language-python" id="el-code"></code></pre>
+    </section>
+
+    <!-- ---------- REPORT ---------- -->
+    <section id="report-section" hidden>
+      <h1>Report</h1>
+      <p class="lead">Project report.</p>
+      <!-- EDIT: put your PDF in this folder and set the filename below -->
+      <div class="pdf-frame">
+        <iframe src="Hartree_Fock_Final_Project-3.pdf" title="Project report"></iframe>
+      </div>
+      <p class="pdf-fallback">
+        
+        
+        
+      </p>
+    </section>
+
+    <!-- ---------- GRAPHS ---------- -->
+    <section id="graphs-section" hidden>
+      <h1>Graphs</h1>
+      <p class="lead">Computed radial probability densities and comparisons.</p>
+
+      <!-- ===== Radial probability densities ===== -->
+      <h2 class="graph-subhead">Radial probability densities</h2>
+      <p>P(r) = |u(r)|² for each computed atom.</p>
+      <div class="figure-grid">
+        <!-- EDIT: drop your PNGs in this folder and set the filenames below.
+             Each figure is a <figure> with an <img> and a <figcaption>. -->
+        <figure class="figure">
+          <img src="Lithium.png" alt="Lithium radial probability density"
+               onerror="this.parentNode.classList.add('missing')" />
+          <figcaption>Lithium — 1sa, 1sb, 2sa</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Beryllium .png" alt="Beryllium radial probability density"
+               onerror="this.parentNode.classList.add('missing')" />
+          <figcaption>Beryllium — 1s and 2s</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Boron.png" alt="Boron radial probability density"
+               onerror="this.parentNode.classList.add('missing')" />
+          <figcaption>Boron — 1sa, 1sb, 2sa, 2sb, 2pa</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Carbon.png" alt="Carbon radial probability density"
+               onerror="this.parentNode.classList.add('missing')" />
+          <figcaption>Carbon — 1sa, 1sb, 2sa, 2sb, 2pa, 2pa</figcaption>
+        </figure>
+      </div>
+
+      <!-- ===== IPM comparison ===== -->
+      <h2 class="graph-subhead">Independent-particle model comparison</h2>
+      <p>
+        HF densities against the hydrogenic independent-particle model,
+        showing the effect of screening and exchange.
+      </p>
+      <div class="figure-grid">
+        <figure class="figure wide">
+          <img src="Hydrogenic comparison.png" alt="HF vs IPM comparison"
+               onerror="this.parentNode.classList.add('missing')" />
+          <figcaption>HF vs hydrogenic radial densities</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ---------- RESULTS ---------- -->
+    <section id="results-section" hidden>
+      <h1>Results</h1>
+      <p class="lead">Computed total energies against reference values.</p>
+      <table class="results-table">
+        <thead>
+          <tr><th>Atom</th><th>Config</th><th>E<sub>total</sub> (E<sub>h</sub>)</th><th>Reference</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Li</td><td>1s² 2s¹</td><td>−7.4285</td><td>−7.4332</td></tr>
+          <tr><td>Be</td><td>1s² 2s²</td><td>−14.5673</td><td>−14.5752</td></tr>
+          <tr><td>B</td><td>1s² 2s² 2p¹</td><td>−24.4857</td><td>−24.5351</td></tr>
+          <tr><td>C</td><td>1s² 2s² 2p²</td><td>−37.5734</td><td>−37.7022</td></tr>
+        </tbody>
+      </table>
+
+      <h2 class="graph-subhead">Orbital energies</h2>
+      <p>
+        Individual orbital eigenvalues (Eₕ) compared to the reference values of
+        Bunge et al. (1993). Spin is indicated by ↑ / ↓.
+      </p>
+      <div class="table-scroll">
+        <table class="results-table orbital-table">
+          <thead>
+            <tr>
+              <th>Atom</th><th>Config</th>
+              <th>1s ↑</th><th>1s ↓</th>
+              <th>2s ↑</th><th>2s ↓</th>
+              <th>2p<sub>x</sub> ↑</th><th>2p<sub>y</sub> ↑</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Li</td><td>1s² 2s¹</td>
+              <td>−2.4837</td><td>−2.4656</td><td>−0.1961</td><td>–</td><td>–</td><td>–</td>
+            </tr>
+            <tr class="ref-row">
+              <td>Li <span class="ref-tag">ref</span></td><td>1s² 2s¹</td>
+              <td>−2.5233</td><td>−2.4764</td><td>−0.1963</td><td>–</td><td>–</td><td>–</td>
+            </tr>
+            <tr>
+              <td>Be <span class="ref-tag">restricted</span></td><td>1s² 2s²</td>
+              <td>−4.7292</td><td>−4.7292</td><td>−0.3088</td><td>−0.3088</td><td>–</td><td>–</td>
+            </tr>
+            <tr class="ref-row">
+              <td>Be <span class="ref-tag">ref</span></td><td>1s² 2s²</td>
+              <td>−4.7327</td><td>−4.7327</td><td>−0.3093</td><td>−0.3093</td><td>–</td><td>–</td>
+            </tr>
+            <tr>
+              <td>B</td><td>1s² 2s² 2p¹</td>
+              <td>−7.6769</td><td>−7.6619</td><td>−0.5414</td><td>−0.4436</td><td>−0.3102</td><td>–</td>
+            </tr>
+            <tr class="ref-row">
+              <td>B <span class="ref-tag">ref</span></td><td>1s² 2s² 2p¹</td>
+              <td>−7.7663</td><td>−7.6493</td><td>−0.5694</td><td>−0.4431</td><td>−0.3091</td><td>–</td>
+            </tr>
+            <tr>
+              <td>C</td><td>1s² 2s² 2p²</td>
+              <td>−11.3049</td><td>−11.2610</td><td>−0.8280</td><td>−0.5867</td><td>−0.4071</td><td>−0.4071</td>
+            </tr>
+            <tr class="ref-row">
+              <td>C <span class="ref-tag">ref</span></td><td>1s² 2s² 2p²</td>
+              <td>−11.3934</td><td>−11.3130</td><td>−0.7816</td><td>−0.6273</td><td>−0.4333</td><td>−0.4333</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- EDIT: add figures / radial density plots here -->
+    </section>
+
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
