@@ -132,8 +132,8 @@ from scipy.sparse.linalg import eigsh
 
 # --- Parameters ---
 Z = 4
-N = 1000
-R = 10.0
+N = 750
+R = 12.5
 dr = R / (N + 1)
 r = dr * np.arange(1, N + 1)
 
@@ -226,8 +226,8 @@ from scipy.sparse.linalg import eigsh
 
 # --- Parameters ---
 Z = 5
-N = 800
-R = 15.0
+N = 750
+R = 12.5
 dr = R / (N + 1)
 r = dr * np.arange(1, N + 1)
 
@@ -361,8 +361,8 @@ from scipy.sparse.linalg import eigsh
 
 # --- Parameters ---
 Z = 6
-N = 600
-R = 15.0
+N = 750
+R = 12.5
 dr = R / (N + 1)
 r = dr * np.arange(1, N + 1)
 
